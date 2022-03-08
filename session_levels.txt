@@ -1,1 +1,1 @@
-{"levels": {"1": {"tries":4,"cleared":true},"2": {"tries":6,"cleared":true}}}
+{"levels": {"2022-06-29 00:00:00": {"tries":1,"cleared":true}}}
