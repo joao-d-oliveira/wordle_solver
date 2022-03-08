@@ -87,7 +87,7 @@ def get_initial_driver():
     option.add_argument('--no-sandbox')
     option.add_argument('--disable-dev-sh-usage')
 
-    driver = webdriver.Chrome('../chromedriver', options=option)
+    driver = webdriver.Chrome('chromedriver', options=option)
 
     return driver
 

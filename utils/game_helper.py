@@ -1,7 +1,7 @@
-import wordle_algo
-from dictionary_helper import *
-from web_helper import *
-from util_helper import *
+from utils.wordle_algo import *
+from utils.dictionary_helper import *
+from utils.web_helper import *
+from utils.util_helper import *
 
 
 def best_guessing_words(dict_global, n=1, corpus='web', words=[], okletters='', notokletters='', okpattern='', nokpattern=[],
@@ -71,7 +71,7 @@ def play_page(driver, number, dict_global, type_guess, corpus='web', seq=None, s
     while trial < 6 and pattern.count('?') > 0:
         if type_guess == 'solver':
             date_2_solve = datetime.datetime.strptime('06/19/2021', '%m/%d/%Y') + datetime.timedelta(days=number)
-            word_try = wordle_algo.solve_worldle(date_2_solve)
+            word_try = solve_worldle(date_2_solve)
         else:
             word_try = best_guessing_words(dict_global=dict_global,corpus=corpus, words=words, okletters=okletters, notokletters=nokletters,
                                            okpattern=pattern,
