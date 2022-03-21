@@ -13,8 +13,9 @@ DEFAULT_WORDS_TRIED = []
 DEFAULT_RESULTS_TRIED = []
 DEFAULT_EXPORT_RES = True
 EXPORT_FILE = 'session_levels.txt'
-GLOBAL_DICT = get_corpus(filter_ngrams=5,
-                         validater='/Users/joao/Documents/Python/wordleSolver/corpus/wordle_av.txt')
+#GLOBAL_DICT = get_corpus(filter_ngrams=5, validater='/Users/joao/Documents/Python/wordleSolver/corpus/wordle_av.txt')
+GLOBAL_DICT = get_corpus(filter_ngrams=5, validater='/Users/joao/Documents/Python/wordleSolver/corpus/wordle_av_all.txt')
+
 
 
 def print_help():
@@ -49,7 +50,7 @@ def process_game_params():
 
 def validation_params(games, type_guess,  w_tried, r_tried):
     assert len(r_tried) == len(w_tried), "in case you want to use already tried words, needs to have same number of results"
-    assert (type_guess == 'guessing' and all([type(g) != datetime.datetime for g in games])) or type_guess == 'solver',\
+    assert (type_guess == 'guessing' and (all([type(g) != datetime.datetime for g in games])) or len(w_tried) > 0) or type_guess == 'solver',\
         'can use datetime only with solver type'
 
 
@@ -67,7 +68,37 @@ if __name__ == '__main__':
     driver = get_initial_driver()
 
     if w_tried:
-        play_page(driver, 246, GLOBAL_DICT, type_guess, corpus=corpus, seq=w_tried, seq_res=r_tried)
+        okletters, nokletters = [], []
+        pattern = '?????'
+        nokpatterns = []
+        for w, r in zip(w_tried, r_tried):
+            nok, pattern_ori = '', ''
+            for i, c in enumerate(w):
+                if r[i] > -1: okletters.append(c)
+                if r[i] == -1: nokletters.append(c)
+                if r[i] == 1: pattern_ori += c
+                else: pattern_ori += '?'
+                if r[i] == 0: nok += c
+                else: nok += '?'
+
+            nokpatterns.append(nok)
+            print_colored(w, r)
+
+        okletters = "".join(okletters)
+        nokletters = "".join(nokletters)
+        words = filter_words(words=GLOBAL_DICT, okletters=okletters, notokletters=nokletters,
+                             okpattern=pattern_ori, nokpattern=nokpatterns)
+
+        score_f = [GLOBAL_DICT[w] for w in words]
+        tot = sum(score_f)
+        score_p = [s / tot for s in score_f]
+        for i, w in enumerate(words):
+            print(f"{w}: {score_f[i]} ({score_p[i]})", sep='\n')
+        import random
+
+        print('choices with freq: ', random.choices(words, weights=score_f, k=1))
+        print('choices with perc: ', random.choices(words, weights=score_p, k=1))
+
     else:
         if exp_res: txt = '{"levels": {'
 
