@@ -86,8 +86,11 @@ def get_initial_driver():
     option.add_argument('--headless')
     option.add_argument('--no-sandbox')
     option.add_argument('--disable-dev-sh-usage')
+    # selenium 3
+    from selenium import webdriver
+    from webdriver_manager.chrome import ChromeDriverManager
 
-    driver = webdriver.Chrome('chromedriver', options=option)
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=option)
 
     return driver
 

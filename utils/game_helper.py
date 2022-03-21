@@ -64,7 +64,6 @@ def play_page(driver, number, dict_global, type_guess, corpus='web', seq=None, s
 
     body = get_initial_page(driver, f"https://metzger.media/games/wordle-archive/?day={number}")
 
-
     words, okletters, nokletters, pattern, nokpatterns, trial = '', '', '', '?????', [], 0
     erase_word = Keys.BACK_SPACE * 5
 
